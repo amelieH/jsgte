@@ -30,6 +30,7 @@ GTE = (function(parentModule) {
     };
     
     Diagram.prototype.ini =function (){
+        this.clear();
         this.strat=[[0,1],[0,1]];
         this.nb_strat=[GTE.tree.matrix.strategies[1].length,GTE.tree.matrix.strategies[2].length];
        
@@ -426,6 +427,7 @@ GTE = (function(parentModule) {
         document.getElementById('matrix-player-1').value = GTE.tree.matrix.getMatrixInStringFormat(0);
         document.getElementById('matrix-player-2').value = GTE.tree.matrix.getMatrixInStringFormat(1);
         GTE.tree.matrix.drawMatrix();
+        this.clear();
         this.ini();
         this.update_from_matrix();
         var x=[196,225,596,625];

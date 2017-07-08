@@ -58,7 +58,6 @@
             y = prompt("Enter the number of moves for the second player", "2");}
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.GENERAL;
         GTE.tools.createIndependentStrategicForm(x, y);
-        GTE.diag.clear();
         //GTE.diag.ini();
         GTE.diag.redraw();
         return false;
@@ -77,7 +76,6 @@
             y = prompt("Enter the number of moves for the second player", "2");}
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.ZEROSUM;
         GTE.tools.createIndependentStrategicForm(x, y);
-        GTE.diag.clear();
         //GTE.diag.ini();
         GTE.diag.redraw();
         return false;
@@ -90,7 +88,6 @@
         }
         GTE.STRATEGICFORMMODE = GTE.STRATEGICFORMMODES.SYMMETRIC;
         GTE.tools.createIndependentStrategicForm(x, x);
-        GTE.diag.clear();
         //GTE.diag.ini();
         GTE.diag.redraw();
         return false;
