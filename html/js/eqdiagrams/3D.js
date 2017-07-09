@@ -233,17 +233,16 @@ function D3MouseupEndpoint (event) {
 function projection(vector,i) { //from theory to reality
     var shift=Number(2*this.margin+this.width);
     var vec0=[200,0,0];
-    var vec1=[100,100];
-    var vec2=[0,20];
+    var vec1=[100,100,0];
+    var vec2=[0,20,0];
     var temp=add(add(mul(vector[0],vec0),mul(vector[1],vec1)),mul(vector[2],vec2));
-    
     return [Number(temp[0]+GTE.diag.margin+i*(2*GTE.diag.margin+GTE.diag.width)),Number(GTE.diag.margin+300-temp[1])];
 }
 
 function projection_triangle(vector,i) { //from theory to reality
     var shift=Number(2*this.margin+this.width);
     var vec0=[200,0,0];
-    var vec1=[100,173];
+    var vec1=[100,173,0];
     var temp=add(mul(vector[0],vec0),mul(vector[1],vec1));
     
     return [Number(temp[0]+GTE.diag.margin+i*(2*GTE.diag.margin+GTE.diag.width)),Number(GTE.diag.margin+530-temp[1])];
@@ -382,6 +381,7 @@ function is_possible (vec,plan){ //check if vec is a point in the convex envelop
 }
 
 function D3compute_best_response(player){ //main function uses all previous functions
+    // the adversary of player has 3 strategies.
     //draw_canvas(player);
     var nb_strat=GTE.diag.nb_strat[player];
     var payoffs=[];
@@ -460,12 +460,12 @@ function D3compute_best_response(player){ //main function uses all previous func
             points_to_plan.push([j]);
             plan_to_points[j].push(points.length-1);
         }
-        for (var k=0;k<added_plan.length;k++){ //add equals plans to associated plans.
+        /*for (var k=0;k<added_plan.length;k++){ //add equals plans to associated plans.
             for (var l=nb_points;l<points.length;l++){
                 points_to_plan[l].push(added_plan[k]);
                 plan_to_points[added_plan[k]].push(l);
             }
-        }
+        }*/
     }
     //check for unicity and inside points
     var u_points=[];
