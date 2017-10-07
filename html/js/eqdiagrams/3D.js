@@ -5,7 +5,7 @@ var moving_point;
 
 
 function D3draw_canvas(i){ //draw the canvas of the 3D drawing for player i
-    
+
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
     if (i==0){
         temp.textContent="Payoff to I";
@@ -17,61 +17,65 @@ function D3draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     temp.setAttribute("x",Number(i*x_shift+150));
     temp.setAttribute("y",40);
     GTE.svg.appendChild(temp);
-    
-    
+
+
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
     if (i==0){
         var j=2;
     }
     else{
         var j=1;}
+
+    //strategies name on the upper part (adversary's strategies, always 3 of them)
     temp.textContent="d";
     temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"0 legendh up");
     temp.setAttribute("x",Number(i*x_shift+50));
     temp.setAttribute("y",372);
     GTE.svg.appendChild(temp);
-    
+
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
     temp.textContent="d";
     temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"1 legendh up");
     temp.setAttribute("x",Number(i*x_shift+250));
     temp.setAttribute("y",372);
     GTE.svg.appendChild(temp);
-    
+
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
     temp.textContent="d";
-    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"2 before"+i+" legendh up");
+    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"2 before"+i+" legendh up"); //before because we want it to be on top of polylines
     temp.setAttribute("x",Number(i*x_shift+150));
     temp.setAttribute("y",272);
     GTE.svg.appendChild(temp);
-    
+
+//strategies name on the lower part, on the triangle side "d=0"
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
     temp.textContent="C=0";
-    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"2_0 change legendh up");
+    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"2_0 legendh up");
     temp.setAttribute("x",Number(i*x_shift+150));
     temp.setAttribute("y",602);
     GTE.svg.appendChild(temp);
-    
+
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
     temp.textContent="d";
-    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"1_0 change legendh up");
+    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"1_0 legendh up");
     temp.setAttribute("x",Number(i*x_shift+70));
     temp.setAttribute("y",500);
     GTE.svg.appendChild(temp);
-    
+
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
     temp.textContent="d";
-    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"0_0 change legendh up");
+    temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"0_0 legendh up");
     temp.setAttribute("x",Number(i*x_shift+230));
     temp.setAttribute("y",500);
     GTE.svg.appendChild(temp);
-    
+
+//Fix bottom triangle of the upper part.
     temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
     temp.setAttribute("class","canvas"+i+" contour up");
     temp.setAttribute("points", Number(GTE.diag.margin+i*x_shift)+", "+Number(GTE.diag.height-GTE.diag.margin)+" "+Number(GTE.diag.margin+i*x_shift+100)+", "+Number(GTE.diag.height-GTE.diag.margin-100)+" "+Number(GTE.diag.margin+i*x_shift+200)+","+Number(GTE.diag.height-GTE.diag.margin)+" "+Number(GTE.diag.margin+i*x_shift)+","+Number(GTE.diag.height-GTE.diag.margin));
-    
+
     GTE.svg.appendChild(temp);
-    
+//3 fix vertical lines of the upper part;
     temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
     temp.setAttribute("class","canvas"+i+" contour up");
     temp.setAttribute("x1", Number(GTE.diag.margin+i*x_shift));
@@ -79,7 +83,7 @@ function D3draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     temp.setAttribute("x2", Number(GTE.diag.margin+i*x_shift));
     temp.setAttribute("y2",Number(GTE.diag.height-GTE.diag.margin));
     GTE.svg.appendChild(temp);
-    
+
     temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
     temp.setAttribute("class","canvas"+i+" contour up");
     temp.setAttribute("x1", Number(GTE.diag.margin+i*x_shift+100));
@@ -87,7 +91,7 @@ function D3draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     temp.setAttribute("x2", Number(GTE.diag.margin+i*x_shift+100));
     temp.setAttribute("y2",Number(GTE.diag.height-GTE.diag.margin-100));
     GTE.svg.appendChild(temp);
-    
+
     temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
     temp.setAttribute("class","canvas"+i+" contour up");
     temp.setAttribute("x1", Number(GTE.diag.margin+i*x_shift+200));
@@ -95,7 +99,8 @@ function D3draw_canvas(i){ //draw the canvas of the 3D drawing for player i
     temp.setAttribute("x2", Number(GTE.diag.margin+i*x_shift+200));
     temp.setAttribute("y2",Number(GTE.diag.height-GTE.diag.margin));
     GTE.svg.appendChild(temp);
-    
+
+//sticks and labels.
     for (var k=0;k<9;k++){
         temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
         temp.setAttribute("class", "canvas"+i+" stick up");
@@ -137,11 +142,11 @@ function draw_plan([p1,p2,p3],i,y){ //draw the payoff plan for player i strategy
     var q1=projection(p1,i);
     var q2=projection(p2,i);
     var q3=projection(p3,i);
-    
+
     var temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
     temp.setAttribute("class","line"+Number(i+1)+" face contour up");
     temp.setAttribute("points", Number(q1[0])+", "+Number(q1[1])+" "+Number(q2[0])+", "+Number(q2[1])+" "+Number(q3[0])+", "+Number(q3[1])+" "+Number(q1[0])+", "+Number(q1[1]));
-    
+
     GTE.svg.appendChild(temp);
     if (y>=0){
         if (i==0){
@@ -153,7 +158,7 @@ function draw_plan([p1,p2,p3],i,y){ //draw the payoff plan for player i strategy
             var strat0=Number(GTE.diag.nb_strat[1]*0+y);
             var strat1=Number(GTE.diag.nb_strat[1]*1+y);
             var strat2=Number(GTE.diag.nb_strat[1]*2+y);
-            
+
         }
         var e=document.createElementNS("http://www.w3.org/2000/svg", "circle");
         e.setAttribute("cx",q1[0]);
@@ -196,7 +201,7 @@ function D3MouseDownEndpoint (event) {
 };
 
 function D3MouseMoveEndpoint (event) {
-    
+
     var mousePosition = GTE.getMousePosition(event);
     var svgPosition = GTE.svg.getBoundingClientRect();
     var stratp=moving_point.getAttribute("stratp");
@@ -211,9 +216,11 @@ function D3MouseMoveEndpoint (event) {
     else{
         var newPos=Math.round((ratio*(-mousePosition.y+svgPosition.top)+GTE.diag.height-3*GTE.diag.margin)/20*GTE.diag.precision)/GTE.diag.precision;
     }
-    if (Number(newPos)<GTE.diag.min) newPos=GTE.diag.min;
-    if (Number(newPos)>GTE.diag.max) newPos=GTE.diag.max;
+    if (Number(newPos)<GTE.diag.min) newPos=GTE.diag.min; //if too low, stay to the minimum.
+    if (Number(newPos)>GTE.diag.max) newPos=GTE.diag.max; //if too high, stay to the maximum.
+    //Only redraw if the payoff changed.
     if( (Number(newPos)-moving_point.getAttribute("cy"))*(Number(newPos)-moving_point.getAttribute("cy"))>GTE.diag.precision*GTE.diag.precision*20){
+        //change the matirx, according to the new payoffs.
         GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value=newPos;
         GTE.tree.matrix.matrix[strat].strategy.payoffs[player].text=newPos;
         D3delete_canvas(player);
@@ -244,7 +251,7 @@ function projection_triangle(vector,i) { //from theory to reality
     var vec0=[200,0,0];
     var vec1=[100,173,0];
     var temp=add(mul(vector[0],vec0),mul(vector[1],vec1));
-    
+
     return [Number(temp[0]+GTE.diag.margin+i*(2*GTE.diag.margin+GTE.diag.width)),Number(GTE.diag.margin+530-temp[1])];
 }
 
@@ -303,7 +310,7 @@ function plan_intersect ([p1,p2,p3],[q1,q2,q3]){ //compute the intersection betw
     var dir= cross (p_nor,q_nor);
     dir=normalize(dir);
     var point=[0,0,0];
-    
+
     if (!equal_num(Number(q_nor[1]*p_nor[2]-p_nor[1]*q_nor[2]),0) && !equal_num(p_nor[1],0)){
         point[2]=Number(q_nor[1]*scal(p_nor,p1)-p_nor[1]*scal(q_nor,q1))/Number(q_nor[1]*p_nor[2]-p_nor[1]*q_nor[2]);
         point[1]=Number(scal(p_nor,p1)-p_nor[2]*point[2])/p_nor[1];
@@ -385,6 +392,7 @@ function D3compute_best_response(player){ //main function uses all previous func
     //draw_canvas(player);
     var nb_strat=GTE.diag.nb_strat[player];
     var payoffs=[];
+    //4 fix plans, the bottom and the 3 "sides"
     var plan=[[[0,0,0],[0,1,0],[1,0,0]],[[0,0,0],[0,1,0],[0,1,1]],[[0,0,0],[1,0,1],[1,0,0]],[[0,1,1],[0,1,0],[1,0,0]]];
     for (var i=0;i<nb_strat;i++){
         payoffs.push([]);
@@ -419,7 +427,7 @@ function D3compute_best_response(player){ //main function uses all previous func
             line_to_plan.push([i,j]);
             plan_to_line[i].push(lines.length-1);
             plan_to_line[j].push(lines.length-1);
-            
+
         }
         for (var k=0;k<equals.length;k++){ //add equals plans to associated plans.
             for (var l=nb_lines;l<lines.length;l++){
@@ -502,7 +510,7 @@ function D3compute_best_response(player){ //main function uses all previous func
             }
         }
     }
-    
+
     var i=points.length-1;
     if (is_possible(points[i], plan)){
         u_points.push(points[i]);
@@ -589,7 +597,7 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
                 }
             }
         }
-        
+
         for (var i=0;i<points.length;i++){
             if(i!=last_point && equal_num(points[i][0],points[last_point][0])){
                 //console.log(points[i][1]+" "+y_coor+" "+points[last_point][1]);
@@ -607,7 +615,7 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
         center[1]=center[1]+points2[new_point][1];
         nb_points=nb_points+1;
         last_point=new_point;
-        
+
     }
     //console.log(s2);
     var temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
@@ -618,12 +626,12 @@ function draw_envelope(points3D,player,strat){ //draw the faces of the upper env
     GTE.svg.insertBefore(temp2,temp);
     GTE.svg.insertBefore(temp,temp2);
     //console.log(s);
-    
+
     temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
     temp.setAttribute("class","canvas"+player+" project"+Number(player+1)+" face contour up");
     temp.setAttribute("points", s2);
     GTE.svg.appendChild(temp);
-    
+
     if (nb_points>2){
         temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
         temp.textContent="d";
@@ -638,7 +646,7 @@ function D3delete_faces(){
     var temp=document.getElementsByClassName("face").length;
     for (var i=0;i<temp;i++)
     GTE.svg.removeChild(document.getElementsByClassName("face")[0]);
-    
+
 }
 
 function D3delete_canvas(player){
