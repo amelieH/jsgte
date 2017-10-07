@@ -33,74 +33,20 @@ GTE = (function(parentModule) {
         this.clear();
         this.strat=[[0,1],[0,1]];
         this.nb_strat=[GTE.tree.matrix.strategies[1].length,GTE.tree.matrix.strategies[2].length];
+        this.ini_arrays();
+        D3delete_canvas(0);
+        D3delete_canvas(1);
+        D2delete_canvas(0);
+        D2delete_canvas(1);
+        if (this.nb_strat[1]==3)
+            D3draw_canvas(0);
+        if (this.nb_strat[1]==2)
+            D2draw_canvas(0);
+        if (this.nb_strat[0]==3)
+            D3draw_canvas(1);
+        if (this.nb_strat[0]==2)
+            D2draw_canvas(1);
 
-       D3delete_canvas(0);
-       D3delete_canvas(1);
-        if (this.nb_strat[0]==2 && this.nb_strat[1]==2){
-            this.ini_html2(2);
-            this.assignEndpoints(2);
-            this.assignLines(2);
-            this.assignIntersections(2);
-            this.ini_arrays();
-        }
-        else {
-            if (this.nb_strat[1]==2){
-                this.ini_html2(1);
-                this.assignEndpoints(1);
-                this.assignLines(1);
-                this.assignIntersections(1);
-                this.ini_arrays();
-
-                var temp= GTE.svg.getElementsByClassName("bottom");
-                for (var k=0;k<temp.length;k++){
-                    temp[k].setAttribute("visibility","hidden");
-                }
-                for (var j=0;j<this.equilibrium.length;j++){
-                    for (var i=0;i<this.equilibrium[j].length;i++){
-                        this.equilibrium[j][i].clear();
-                    }
-                }
-                this.equilibrium=[[],[],[]];
-                var div=document.getElementById("eq_list");
-                temp= div.children.length;
-                for (var i=0;i<temp;i++){
-                   div.removeChild(div.children[0]);}
-                if (this.nb_strat[0]==3){
-                    D3draw_canvas(1);
-                }
-            }
-
-            if (this.nb_strat[1]==3){
-                var temp= GTE.svg.getElementsByClassName("bottom");
-                for (var k=0;k<temp.length;k++){
-                    temp[k].setAttribute("visibility","hidden");
-
-                }
-                var temp= GTE.svg.getElementsByClassName("line_down").length;
-                for (var k=0;k<temp;k++){
-                    GTE.svg.removeChild(GTE.svg.getElementsByClassName("line_down")[0]);
-                }
-                for (var j=0;j<this.equilibrium.length;j++){
-                    for (var i=0;i<this.equilibrium[j].length;i++){
-                        this.equilibrium[j][i].clear();
-                    }
-                }
-                this.equilibrium=[[],[],[]];
-                var div=document.getElementById("eq_list");
-                temp= div.children.length;
-                for (var i=0;i<temp;i++){
-                    div.removeChild(div.children[0]);}
-                this.ini_arrays();
-                if ( this.nb_strat[0]==3){
-                    D3draw_canvas(0);
-                    D3draw_canvas(1);
-                }
-                if (this.nb_strat[0]>3 || this.nb_strat[0]<3){
-                    D3draw_canvas(0);
-
-                }
-            }
-        }
     }
 
     Diagram.prototype.ini_html2 = function (max){
@@ -432,95 +378,16 @@ GTE = (function(parentModule) {
         this.update_from_matrix();
         var x=[196,225,596,625];
         var p=[2,1];
-        if (this.nb_strat[0]==2 && this.nb_strat[1]==2){
-            var max=2;
-        }
-        else {
-            var max=1;}
-
-        /* for (var i=0;i<max;i++){
-         var strat11= new GTE.UI.Widgets.ContentEditable(x[Number(2*i)],390,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT, GTE.tree.matrix.strategies[p[i]][GTE.diag.strat[p[i]-1][1]].moves[0].name, "player"+Number(p[i])+" legendh align_left",1)
-         .index(p[i]-1)
-         .onSave(function () {
-         var text = this.getCleanedText();
-         if (text === "") {
-         window.alert("Strategy name should not be empty.");
-         } else {
-         var test=0;
-         for (var j=0;j<GTE.diag.nb_strat[this.index];j++){
-         if (text==GTE.tree.matrix.strategies[Number(this.index+1)][j].moves[0].name){
-         if (j==GTE.diag.strat[this.index][0]){
-         window.alert("The two strategies have to be different.");
-         this.text=GTE.diag.strat[this.index][1];
-         }
-         else{
-         GTE.diag.strat[this.index][1]=j;
-         }
-         test=1;
-         }
-         }
-         if (test==0){
-         window.alert("Strategy name should correspond to a strategy.");
-         this.text=GTE.diag.strat[this.index][1];
-         }
-         }
-         GTE.diag.cleanForeign();
-         GTE.diag.redraw();    });
-
-         var strat12= new GTE.UI.Widgets.ContentEditable(x[Number(2*i+1)],375,GTE.CONSTANTS.CONTENT_EDITABLE_GROW_TO_RIGHT, GTE.tree.matrix.strategies[p[i]][GTE.diag.strat[p[i]-1][0]].moves[0].name, "player"+Number(p[i])+" strat",1)
-         .index(p[i]-1)
-         .onSave(function () {
-         var text = this.getCleanedText();
-         if (text === "") {
-         window.alert("Strategy name should not be empty.");
-         } else {
-         var test=0;
-         for (var j=0;j<GTE.diag.nb_strat[this.index];j++){
-         if (text==GTE.tree.matrix.strategies[Number(this.index+1)][j].moves[0].name){
-         if (j==GTE.diag.strat[this.index][1]){
-         window.alert("The two strategies have to be different.");
-         this.text=GTE.diag.strat[this.index][0];}
-         else{
-         GTE.diag.strat[this.index][0]=j;
-         }
-         test=1;
-         }
-         }
-         if (test==0){
-         window.alert("Strategy name should correspond to a strategy.");
-         this.text=GTE.diag.strat[this.index][0];
-         }
-         }
-         GTE.diag.cleanForeign();
-         GTE.diag.redraw();    });
-         }*/
-
-        if (this.nb_strat[0]==2 && this.nb_strat[1]==2){
-            this.compute_best_response(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1],max);
-            this.draw_square_down(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1]);
-        }
-        else {
-            if (this.nb_strat[1]==2){
-                this.compute_best_response(this.strat[0][0],this.strat[0][1],this.strat[1][0],this.strat[1][1],max);
-            }
-            if (this.nb_strat[0]==3 &&this.nb_strat[1]==3){
-                D3delete_faces();
-                D3compute_best_response(0);
-                D3compute_best_response(1);
-            }
-            else {
-                if (this.nb_strat[0]==3){
-                    D3delete_faces();
-                    D3compute_best_response(1);
-                }
-
-                if (this.nb_strat[1]==3){
-                    D3delete_faces();
-                    D3compute_best_response(0);
-                }
-            }
-        }
-
+        D2delete_faces();
+        D3delete_faces();
+        if (this.nb_strat[0]==2)
+        D2compute_best_response(1);
+        if (this.nb_strat[0]==3)
+        D3compute_best_response(1);
+        if (this.nb_strat[1]==2)
+        D2compute_best_response(0);
+        if (this.nb_strat[1]==3)
+        D3compute_best_response(0);
         this.update_from_matrix();
     };
 
