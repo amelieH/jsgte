@@ -49,118 +49,6 @@ GTE = (function(parentModule) {
 
     }
 
-    Diagram.prototype.ini_html2 = function (max){
-        var x_shift = Number(2*this.margin+this.width);
-        var temp= GTE.svg.getElementsByClassName("up").length;
-        for( var k=0;k<temp;k++){
-            GTE.svg.removeChild(GTE.svg.getElementsByClassName("up")[0]);
-        }
-        for (var i=0;i<max;i++){
-            temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-            temp.setAttribute("class","contour up");
-            temp.setAttribute("points", Number(this.margin+i*x_shift)+", "+this.margin+" "+Number(this.margin+i*x_shift)+", "+Number(this.height-this.margin)+" "+Number(this.width-this.margin+i*x_shift)+","+Number(this.height-this.margin)+" "+Number(this.width-this.margin+i*x_shift)+","+this.margin);
-
-            GTE.svg.appendChild(temp);
-            temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            if (i==0){
-                temp.textContent="Payoff to I";
-            }else{
-                temp.textContent="Payoff to II";
-            }
-            temp.setAttribute("class", "player"+Number(i+1)+" player"+Number(i+1)+"_title title up");
-            temp.setAttribute("x",Number(i*x_shift+150));
-            temp.setAttribute("y",40);
-            GTE.svg.appendChild(temp);
-
-
-            temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            if (i==0){
-                var j=2;
-                temp.textContent="II";
-            }
-            else{
-                var j=1;
-                temp.textContent="I";}
-            temp.setAttribute("class", "player"+j+"_name player"+j+" align_right legendh up");
-            temp.setAttribute("x",Number(i*x_shift+95));
-            temp.setAttribute("y",390);
-            GTE.svg.appendChild(temp);
-
-            temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            temp.textContent="'s probability of";
-            temp.setAttribute("class", "player"+j+" legendh up");
-            temp.setAttribute("x",Number(i*x_shift+150));
-            temp.setAttribute("y",390);
-            GTE.svg.appendChild(temp);
-
-            temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            temp.textContent="d";
-            temp.setAttribute("class", "player"+j+" strat"+Number(j-1)+"1 align_left legendh up");
-            temp.setAttribute("x",Number(i*x_shift+210));
-            temp.setAttribute("y",390);
-            GTE.svg.appendChild(temp);
-
-            /* temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-             temp.textContent="against";
-             temp.setAttribute("class", "player"+j+" legendh up");
-             temp.setAttribute("x",Number(i*x_shift+207));
-             temp.setAttribute("y",390);
-             GTE.svg.appendChild(temp);*/
-
-            temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            temp.textContent="0";
-            temp.setAttribute("class", "player"+j+" legendh up");
-            temp.setAttribute("x",Number(i*x_shift+50));
-            temp.setAttribute("y",372);
-            GTE.svg.appendChild(temp);
-
-            temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            temp.textContent="1";
-            temp.setAttribute("class", "player"+j+" legendh up");
-            temp.setAttribute("x",Number(i*x_shift+250));
-            temp.setAttribute("y",372);
-            GTE.svg.appendChild(temp);
-
-            temp = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-            temp.setAttribute("class", "up");
-            temp.setAttribute("id", "envelope"+Number(i+1));
-            temp.setAttribute("points",Number(this.margin+i*x_shift)+", "+this.margin+" "+Number(this.margin+i*x_shift)+", "+Number(this.height-this.margin)+" "+Number(this.width-this.margin+i*x_shift)+","+Number(this.height-this.margin)+" "+Number(this.width-this.margin+i*x_shift)+","+this.margin);
-            GTE.svg.appendChild(temp);
-
-            for (var k=0;k<9;k++){
-                for (var h=0;h<2;h++){
-                    temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
-                    temp.setAttribute("class", "stick up");
-                    temp.setAttribute("x1",Number(i*x_shift+50+h*200));
-                    temp.setAttribute("x2",Number(i*x_shift+45+h*210));
-                    temp.setAttribute("y1",Number(80+k*this.step));
-                    temp.setAttribute("y2",Number(80+k*this.step));
-                    GTE.svg.appendChild(temp);
-                    temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                    temp.setAttribute("class", "sticklabel up");
-                    temp.setAttribute("x",Number(i*x_shift+35+h*230));
-                    temp.setAttribute("y",Number(85+k*this.step));
-                    temp.textContent=Number(9-k);
-                    GTE.svg.appendChild(temp);
-                }
-            }
-
-        }
-        if (max <2){
-            temp= GTE.svg.getElementsByClassName("bottom");
-            for (var k=0;k<temp.length;k++){
-                temp[k].setAttribute("visibility","hidden");
-            }
-        }
-        if (max==2){
-            temp= GTE.svg.getElementsByClassName("bottom");
-            for (var k=0;k<temp.length;k++){
-                temp[k].setAttribute("visibility","visible");
-            }
-        }
-
-    }
-
     Diagram.prototype.update_from_matrix = function (){
         if (Number(document.getElementById("precision").value) >0){
             GTE.diag.precision=1/Number(document.getElementById("precision").value);
@@ -179,16 +67,6 @@ GTE = (function(parentModule) {
 
             }
         }
-        //
-        // for (var i=0;i<2;i++){
-        //     for (var j=0;j<this.nb_strat[i];j++){
-        //         var temp= GTE.svg.getElementsByClassName("strat"+""+i+""+j);
-        //         for ( var l=0;l<temp.length;l++){
-        //             if (temp[l].textContent!="")
-        //             temp[l].textContent=GTE.tree.matrix.strategies[i+1][j].moves[0].name;
-        //         }
-        //     }
-        // }
 
         //upates player's names
         var name_player=GTE.svg.getElementsByClassName("player1_name");
@@ -225,46 +103,6 @@ GTE = (function(parentModule) {
 
     };
 
-    Diagram.prototype.assignEndpoints = function(max) {
-        var table_x=[[50,250],[450,650]];
-        for (var j=0; j<2;j++){
-            this.endpoints.push([]);
-            for (var i=0;i<2*this.nb_strat[j];i++){
-                if (j==0){
-                    this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][i%2],this.height-this.margin,j,i,this.nb_strat[1]*(~~(i/2))+i%2, max));
-                }
-                else{
-                    this.endpoints[j].push( new GTE.Endpoint(table_x[j%2][i%2],this.height-this.margin,j,i,this.nb_strat[1]*(i%2)+(~~(i/2)),max));
-                }
-            }
-        }
-
-    };
-
-    Diagram.prototype.assignLines = function(max) {
-        for (var j=0; j<2;j++){
-            this.lines.push([]);
-            for(var i=0;i<this.nb_strat[j];i++){
-                this.lines[j].push( new GTE.Line(j,i, max));
-            }
-        }
-    };
-
-    Diagram.prototype.assignIntersections = function(max){
-        for (var i=0; i<2 ; i++){
-            this.intersect.push([]);
-            for (var j=0 ; j< this.nb_strat[i]-1 ; j++){
-                for (var k=j+1; k<this.nb_strat[i]; k++){
-                    var temp=new GTE.Intersection(i, j, k,max);
-                    temp.attachLine(this.lines[i][j]);
-                    temp.attachLine(this.lines[i][k]);
-                    this.intersect[i].push( temp);
-
-                }
-            }
-        }
-    };
-
     Diagram.prototype.ini_arrays = function() {
         for (var i=0; i<2; i++){
             this.payoffs.push([]);
@@ -281,92 +119,6 @@ GTE = (function(parentModule) {
         }
     };
 
-    /*
-     Associate html element to endpoint object.
-     */
-    Diagram.prototype.doMouseDownEndpoint = function (event){
-        event.preventDefault();
-        var strat=event.currentTarget.getAttribute("asso_strat");
-        var player=event.currentTarget.getAttribute("asso_player");
-        GTE.diag.moving_endpoint= GTE.diag.endpoints[player][strat];
-        GTE.diag.moving=event.target;
-        document.addEventListener("mousemove", GTE.diag.doMouseMoveEndpoint);
-        document.addEventListener("mouseup", GTE.diag.doMouseupEndpoint);
-        event.currentTarget.removeEventListener("mousedown", GTE.diag.doMouseDownEndpoint);
-    };
-
-    Diagram.prototype.doMouseDownLine = function (event){
-        event.preventDefault();
-        GTE.diag.prev_pos=GTE.getMousePosition(event);
-        var strat=event.currentTarget.getAttribute("asso_strat");
-        var player=event.currentTarget.getAttribute("asso_player");
-        GTE.diag.moving_line= GTE.diag.lines[player][strat];
-        GTE.diag.prev_pros=GTE.getMousePosition(event);
-        GTE.diag.moving=event.target;
-        document.addEventListener("mousemove", GTE.diag.doMouseMoveLine);
-        document.addEventListener("mouseup", GTE.diag.doMouseupLine);
-        event.currentTarget.removeEventListener("mousedown", GTE.diag.doMouseDownLine);
-    };
-
-    /*
-     Convert mouse's moves in endpoint's moves
-     */
-    Diagram.prototype.doMouseMoveEndpoint = function (event) {
-        var mousePosition = GTE.getMousePosition(event);
-        var svgPosition = GTE.svg.getBoundingClientRect();
-        var newPos=Math.round((2*GTE.diag.height/(svgPosition.bottom-svgPosition.top)*(-mousePosition.y+svgPosition.top)+GTE.diag.height-GTE.diag.margin)/GTE.diag.step*GTE.diag.precision)/GTE.diag.precision;
-        if (Number(newPos)<GTE.diag.min) newPos=GTE.diag.min;
-        if (Number(newPos)>GTE.diag.max) newPos=GTE.diag.max;
-        if( (Number(newPos)-GTE.diag.moving_endpoint.getPosy())*(Number(newPos)-GTE.diag.moving_endpoint.getPosy())>0.005){
-            var player=GTE.diag.moving_endpoint.getPlayer();
-            var strat=GTE.diag.moving_endpoint.getStrat_mat();
-            GTE.tree.matrix.matrix[strat].strategy.payoffs[player].value=newPos;
-            GTE.tree.matrix.matrix[strat].strategy.payoffs[player].text=newPos;
-            GTE.diag.redraw();
-        }
-    };
-
-    Diagram.prototype.doMouseMoveLine = function (event) {
-        var mousePosition = GTE.getMousePosition(event)
-        var svgPosition = GTE.svg.getBoundingClientRect();
-        var diff=mousePosition.y-GTE.diag.prev_pos.y;
-        var player=GTE.diag.moving_line.getPlayer();
-        var strat1=GTE.diag.moving_line.getStrat1();
-        var strat2=GTE.diag.moving_line.getStrat2();
-        var point1=GTE.tree.matrix.matrix[GTE.diag.endpoints[player][strat1].getStrat_mat()].strategy.payoffs[player];
-        var point2=GTE.tree.matrix.matrix[GTE.diag.endpoints[player][strat2].getStrat_mat()].strategy.payoffs[player];
-        var diffPos=~~((2*GTE.diag.height/(svgPosition.bottom-svgPosition.top)*(diff))/GTE.diag.step*GTE.diag.precision)/GTE.diag.precision;
-        var pos1=Math.round((point1.value-diffPos)*GTE.diag.precision)/GTE.diag.precision;
-        var pos2=Math.round((point2.value-diffPos)*GTE.diag.precision)/GTE.diag.precision;
-        if (pos2>=GTE.diag.min && pos2<=GTE.diag.max && pos1>=GTE.diag.min && pos1<=GTE.diag.max && diffPos!=0  ){
-            point1.value=pos1;
-            point2.value=pos2;
-            point1.text=pos1;
-            point2.text=pos2;
-            GTE.diag.prev_pos=mousePosition;
-            point1.draw();
-            point2.draw();
-            GTE.diag.redraw();
-        }
-    };
-
-    Diagram.prototype.doMouseupLine = function(event) {
-        var mousePosition = GTE.getMousePosition(event)
-        document.removeEventListener("mousemove", GTE.diag.doMouseMoveLine);
-        document.removeEventListener("mouseup", GTE.diag.doMouseupLine);
-        GTE.diag.moving.addEventListener("mousedown", GTE.diag.doMouseDownLine);
-        GTE.diag.moving=null;
-    };
-
-    Diagram.prototype.doMouseupEndpoint = function(event) {
-        var mousePosition = GTE.getMousePosition(event)
-        document.removeEventListener("mousemove", GTE.diag.doMouseMoveEndpoint);
-        document.removeEventListener("mouseup", GTE.diag.doMouseupEndpoint);
-        GTE.diag.moving.addEventListener("mousedown", GTE.diag.doMouseDownEndpoint);
-        GTE.diag.moving=null;
-    };
-
-
     Diagram.prototype.redraw = function (){
 
         GTE.tree.clear();
@@ -380,404 +132,21 @@ GTE = (function(parentModule) {
         var p=[2,1];
         D2delete_faces();
         D3delete_faces();
+        var point1=[];
+        var point2=[];
         if (this.nb_strat[0]==2)
-        D2compute_best_response(1);
+        point2=D2compute_best_response(1);
         if (this.nb_strat[0]==3)
         D3compute_best_response(1);
         if (this.nb_strat[1]==2)
-        D2compute_best_response(0);
+        point1=D2compute_best_response(0);
         if (this.nb_strat[1]==3)
         D3compute_best_response(0);
+        if (this.nb_strat[1]==2&&this.nb_strat[0]==2){
+        this.draw_square_down(point1,point2);
+        }
         this.update_from_matrix();
     };
-
-    Diagram.prototype.compute_best_response = function(strat11=0, strat12=1, strat21=0, strat22=1, max) {
-        for (var i=0;i<this.nb_strat[0];i++){
-            this.endpoints[0][i*2].strat_matrix=Number(i*this.nb_strat[1]+strat21);
-            this.endpoints[0][Number(i*2+1)].strat_matrix=Number(i*this.nb_strat[1]+strat22);
-        }
-        if (max>1)
-        for (var i=0;i<this.nb_strat[0];i++){
-            this.endpoints[1][i*2].strat_matrix=Number(strat11*this.nb_strat[1]+i);
-            this.endpoints[1][Number(i*2+1)].strat_matrix=Number(strat12*this.nb_strat[1]+i);
-        }
-
-
-
-        for (var i=0;i<this.nb_strat[0];i++){
-            this.endpoints[0][i*2].move(this.height-this.margin-this.payoffs[0][i][strat21]*this.step);
-            this.endpoints[0][Number(i*2+1)].move(this.height-this.margin-this.payoffs[0][i][strat22]*this.step);
-        }
-        if (max>1){
-            for (var i=0;i<this.nb_strat[1];i++){
-                this.endpoints[1][i*2].move(this.height-this.margin-this.payoffs[1][strat11][i]*this.step);
-                this.endpoints[1][Number(i*2+1)].move(this.height-this.margin-this.payoffs[1][strat12][i]*this.step);
-            }
-        }
-        // compute all intersect points
-        var strat=[[strat21,strat22],[strat11,strat12]]
-        var Y11; //left extremity of the first line
-        var Y12; //right extremity of the first line
-        var Y21; //left extremity of the second line
-        var Y22; //right extremity of the second line
-
-        for (var i=0;i<2;i++){
-            for (var j=0; j< this.nb_strat[i]-1;j++){
-                for (var k=j+1 ; k<this.nb_strat[i];k++){
-
-                    if (i==0){
-                        Y11=this.payoffs[i][j][strat[i][0]];
-                        Y12=this.payoffs[i][j][strat[i][1]];
-                        Y21=this.payoffs[i][k][strat[i][0]];
-                        Y22=this.payoffs[i][k][strat[i][1]];}
-                    else{
-                        Y11=this.payoffs[i][strat[i][0]][j];
-                        Y12=this.payoffs[i][strat[i][1]][j];
-                        Y21=this.payoffs[i][strat[i][0]][k];
-                        Y22=this.payoffs[i][strat[i][1]][k];
-                    }
-                    var middle_x=(Y21-Number(Y11))/(Y21-Number(Y22)+Y12-Number(Y11));
-                    var middle_y=(Y12-Number(Y11))*middle_x+Number(Y11);
-                    if (Number(Y11)>Number(Y21) && Number(Y12)>Number(Y22)){
-                        var middle_x=0;
-                        var middle_y=0; //there is no intersection point
-                        this.best_response[i][0]=0;
-                        this.best_response[i][1]=0;
-                    }
-                    else{
-                        if (Y11<Y21 && Y12<Y22){
-                            var middle_x=1;
-                            var middle_y=0; //there is no intersection point
-                            this.best_response[i][0]=1;
-                            this.best_response[i][1]=1;
-                        }
-                        else {
-                            if (Y11==Y21){
-                                var middle_x=0;
-                                var middle_y=Y21; //there is no intersection point
-                                this.best_response[i][0]=-1;
-                                if (Y12>Y22){
-                                    this.best_response[i][1]=0;
-                                }
-                                else{
-                                    if (Y12==Y22){
-                                        this.best_response[i][1]=-1;
-                                    }
-                                    else {
-                                        this.best_response[i][1]=1;
-                                    }
-                                }
-                            }else{
-                                if (Y12==Y22){
-                                    var middle_x=1;
-                                    var middle_y=Y22; //there is no intersection point
-                                    this.best_response[i][1]=-1;
-                                    if (Y11>Y21){
-                                        this.best_response[i][0]=0;}
-                                    else{
-                                        this.best_response[i][0]=1;}
-                                }
-                                else {
-                                    if(Y11 > Y21){
-                                        this.best_response[i][0]=0;
-                                    }
-                                    else{
-                                        this.best_response[i][0]=1;
-                                    }
-                                    if(Y12 > Y22){
-                                        this.best_response[i][1]=0;
-                                    }
-                                    else{
-                                        this.best_response[i][1]=1;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (i==0 || max >1)
-                    this.intersect[i][Number((this.nb_strat[i]*(this.nb_strat[i]-1))/2-((this.nb_strat[i]-j)*(this.nb_strat[i]-j-1))/2+(k-j)-1)].move(i*(2*this.margin+this.width)+this.margin+middle_x*(this.width-2*Number(this.margin)),this.height-Number(this.margin)-Number(this.step)*middle_y);
-                }
-            }
-        }
-        //To make sure that best_response are set for the right strategies.
-        for (var i=0;i<2;i++){
-            if (i==0){
-                Y11=this.payoffs[i][strat11][strat21];
-                Y12=this.payoffs[i][strat11][strat22];
-                Y21=this.payoffs[i][strat12][strat21];
-                Y22=this.payoffs[i][strat12][strat22];}
-            else{
-                Y11=this.payoffs[i][strat11][strat21];
-                Y12=this.payoffs[i][strat12][strat21];
-                Y21=this.payoffs[i][strat11][strat22];
-                Y22=this.payoffs[i][strat12][strat22];
-            }
-            var middle_x=(Y21-Number(Y11))/(Y21-Number(Y22)+Y12-Number(Y11));
-            var middle_y=(Y12-Number(Y11))*middle_x+Number(Y11);
-            if (Number(Y11)>Number(Y21) && Number(Y12)>Number(Y22)){
-                this.best_response[i][0]=0;
-                this.best_response[i][1]=0;
-            }
-            else{
-                if (Y11<Y21 && Y12<Y22){
-                    this.best_response[i][0]=1;
-                    this.best_response[i][1]=1;
-                }
-                else {
-                    if (Y11==Y21){
-                        this.best_response[i][0]=-1;
-                        if (Y12>Y22){
-                            this.best_response[i][1]=0;
-                        }
-                        else{
-                            if (Y12==Y22){
-                                this.best_response[i][1]=-1;
-                            }
-                            else {
-                                this.best_response[i][1]=1;
-                            }
-                        }
-                    }else{
-                        if (Y12==Y22){
-                            this.best_response[i][1]=-1;
-                            if (Y11>Y21){
-                                this.best_response[i][0]=0;}
-                            else{
-                                this.best_response[i][0]=1;}
-                        }
-                        else {
-                            if(Y11 > Y21){
-                                this.best_response[i][0]=0;
-                            }
-                            else{
-                                this.best_response[i][0]=1;
-                            }
-                            if(Y12 > Y22){
-                                this.best_response[i][1]=0;
-                            }
-                            else{
-                                this.best_response[i][1]=1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        for (var f=0;f<max;f++){
-            for (var g=0;g<this.intersect[f].length;g++){
-                this.intersect[f][g].hide();
-            }
-        }
-
-        // Lines update
-        for (var i=0 ; i< this.lines.length ; i++){
-            if (i==0 || max >1){
-                for (var j=0 ; j< this.lines[i].length ; j++){
-                    var temp=this.lines[i][j];
-                    for (var h=0; h<2; h++){
-                        temp.html_element[h].setAttributeNS(null, "y1", this.endpoints[temp.getPlayer()][temp.getStrat1()].getPosy());
-                        temp.html_element[h].setAttributeNS(null, "y2", this.endpoints[temp.getPlayer()][temp.getStrat2()].getPosy());
-                    }
-                }
-            }
-        }
-
-        this.computeEnvelope(strat11, strat12, strat21, strat22,max);
-    }
-
-
-    Diagram.prototype.computeEnvelope = function(strat11=0, strat12=1, strat21=0, strat22=1, max){
-        var strat=[[strat21,strat22],[strat11,strat12]];
-        var cmp=0;
-
-        var strat_point = [[],[]] // to reccord to which strategies if point on the envelope corresponds to
-        var point=[[],[]];
-        for (var i=0;i<2;i++){ //player
-            for (var f=0;f<this.nb_strat[i];f++){ //hide labelline
-                if (i==0 || max>1){
-                    this.lines[i][f].moveUnder();
-                }
-            }
-            var strat_act=[];//line on wich point will be.
-            var strat_prev=[];//line on wich point was.
-            var strat_new=[];
-            var strat_mix=[];
-            var y_max=350;
-            var x_min=Number(i*(this.width+Number(2*this.margin))+Number(this.margin));
-            var inter;
-            for (var j=0;j<this.nb_strat[i];j++){ //select all higher left endpoints
-                if (i==0){
-                    if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][j][strat[i][0]]))< Number(y_max)){
-                        strat_act=[j];
-                        y_max=this.height-this.margin-this.step*Number(this.payoffs[i][j][strat[i][0]]);
-                    }
-                    else {
-                        if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][j][strat[i][0]]))== Number(y_max)){
-                            strat_act.push(j);
-                        }
-                    }
-                }
-                else{
-                    if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][strat[i][0]][j]))< Number(y_max)){
-                        strat_act=[j];
-                        y_max=this.height-this.margin-this.step*Number(this.payoffs[i][strat[i][0]][j]);
-                    }
-                    else {
-                        if (Number(this.height-this.margin-this.step*Number(this.payoffs[i][strat[i][0]][j]))== Number(y_max)){
-                            strat_act.push(j);
-                        }
-                    }
-                }
-            }
-            strat_prev=strat_act;
-            point[i].push([i*(this.width+2*this.margin)+this.margin,y_max]);
-            strat_point[i].push(strat_act);
-            while(Number(x_min)<Number(i*(this.width+2*this.margin)+this.width-this.margin)){
-                cmp=cmp+1;
-                inter=[];
-                var x_new=point[i][point[i].length-1][0];
-                var y_new=point[i][point[i].length-1][1];;
-                for (var x=0;x<strat_act.length;x++){
-                    var S=strat_act[x];
-                    for (var l=0;l<this.intersect[i].length;l++){
-                        if ((this.intersect[i][l].getStrat1()==S|| this.intersect[i][l].getStrat2()==S)&&  Number(this.intersect[i][l].getPosx())>Number(x_min)){
-                            if (x_new==point[i][point[i].length-1][0])
-                            {
-                                x_new=this.intersect[i][l].getPosx();
-                                y_new=Number(this.intersect[i][l].getPosy());
-                                strat_mix=[l];
-                                inter=[true];
-                                if (i==0 || max>1)
-                                this.intersect[i][l].show();
-                                strat_new=[this.intersect[i][l].getStrat1(),this.intersect[i][l].getStrat2()];
-                                strat_prev=[S];
-                            }
-                            else{
-                                if( Math.round(Number((point[i][point[i].length-1][1]-y_new)/(x_new-point[i][point[i].length-1][0]))*1000)/1000 <Math.round(Number((point[i][point[i].length-1][1]-this.intersect[i][l].getPosy())/(this.intersect[i][l].getPosx()-point[i][point[i].length-1][0]))*1000)/1000  || (Math.round(Number((point[i][point[i].length-1][1]-y_new)/(x_new-point[i][point[i].length-1][0]))*1000)/1000 ==Math.round(Number((point[i][point[i].length-1][1]-this.intersect[i][l].getPosy())/(this.intersect[i][l].getPosx()-point[i][point[i].length-1][0]))*1000)/1000  && Number(this.intersect[i][l].getPosx())<Number(x_new))){
-                                    x_new=this.intersect[i][l].getPosx();
-                                    y_new=Number(this.intersect[i][l].getPosy());
-
-                                    for (f=0;f<strat_mix.length;f++){
-                                        if (inter[f]==true){
-                                            this.intersect[i][strat_mix[f]].hide();
-                                        }
-                                    }
-                                    strat_mix=[l];
-                                    inter=[true];
-
-                                    if (i==0 || max>1)
-                                    this.intersect[i][l].show();
-                                    strat_new=[this.intersect[i][l].getStrat1(),this.intersect[i][l].getStrat2()];
-                                    strat_prev=[S];
-
-                                }
-                                else{
-                                    if (Number(x_new)==Number(this.intersect[i][l].getPosx())&&Number(y_new)==Number(this.intersect[i][l].getPosy())){
-                                        x_new=this.intersect[i][l].getPosx();
-                                        y_new=Number(this.intersect[i][l].getPosy());
-                                        strat_mix.push(l);
-
-                                        if (i==0 || max>1)
-                                        this.intersect[i][l].show();
-                                        inter.push(true);
-                                        strat_new.push(this.intersect[i][l].getStrat1());
-                                        strat_new.push(this.intersect[i][l].getStrat2());
-                                        strat_prev.push(S);
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                    var temp=this.endpoints[i][this.lines[i][S].getStrat2()];
-                    if (  Number(temp.getPosx())>Number(x_min)){
-                        if (x_new==point[i][point[i].length-1][0])
-                        {
-                            x_new=temp.getPosx();
-                            y_new=temp.getPosy();
-                            strat_mix=[l];
-                            inter=[false];
-                            strat_new=[S];
-                            strat_prev=[S];
-
-                        }
-                        else{
-                            if( Math.round(Number((point[i][point[i].length-1][1]-y_new)/(x_new-point[i][point[i].length-1][0]))*1000)/1000 <Math.round(Number((point[i][point[i].length-1][1]-temp.getPosy())/(temp.getPosx()-point[i][point[i].length-1][0]))*1000)/1000  ||(Math.round(Number((point[i][point[i].length-1][1]-y_new)/(x_new-point[i][point[i].length-1][0]))*1000)/1000 ==Math.round(Number((point[i][point[i].length-1][1]-temp.getPosy())/(temp.getPosx()-point[i][point[i].length-1][0]))*1000)/1000  &&Number(temp.getPosx())<Number(x_new))){
-                                x_new=temp.getPosx();
-                                y_new=Number(temp.getPosy());
-                                for (f=0;f<strat_mix.length;f++){
-                                    if (inter[f]==true){
-                                        this.intersect[i][strat_mix[f]].hide();
-                                    }
-                                }
-                                strat_mix=[l];
-                                inter=[false];
-                                strat_new=[S];
-                                strat_prev=[S];
-
-                            }
-                            else{
-                                if (Number(x_new)==Number(temp.getPosx())&& Number(y_new)==Number(temp.getPosy())){
-                                    x_new=temp.getPosx();
-                                    y_new=Number(temp.getPosy());
-                                    strat_mix.push(l);
-                                    inter.push(false);
-                                    strat_new.push(S);
-                                    strat_prev.push(S);}
-                            }
-                        }
-                    }
-                }
-
-                if (Number(x_new)>x_min && Number(x_new)<Number(i*(this.width+2*this.margin)+this.width-this.margin)){
-                    x_min=x_new;
-                    strat_act=strat_new;
-                    point[i].push([this.intersect[i][strat_mix[0]].getPosx(),this.intersect[i][strat_mix[0]].getPosy()]);
-                    strat_point[i].push(strat_act);
-                    strat_mix=[];
-                }
-                else{
-                    point[i].push([x_new,y_new]);
-                    x_min=x_new;
-                    strat_point[i].push(strat_new);
-
-                }
-                for (var f=0;f<strat_prev.length;f++){
-                    if (i==0 || max >1){
-                        var y_step=(point[i][point[i].length-1][1]-point[i][point[i].length-2][1])/strat_prev.length;
-                        var x_step=(point[i][point[i].length-1][0]-point[i][point[i].length-2][0])/strat_prev.length;
-                        var line=this.lines[i][strat_prev[f]];
-                        var pos_y=Number(point[i][point[i].length-2][1]+(f+0.5)*y_step-this.step/2);
-                        var pos_x=Number(point[i][point[i].length-2][0]+(f+0.5)*x_step);
-                        line.moveLabel(pos_x,pos_y);
-                    }
-                }
-            }
-            var s=Number(i*(this.width+2*this.margin)+this.margin)+",50 ,";
-            for (var k=0;k<point[i].length;k++){
-                s=s+point[i][k][0]+","+point[i][k][1]+" ,";
-            }
-            s=s+Number(i*(this.width+2*this.margin)+this.width-this.margin)+",50";
-            if (i==0){
-                var envelope=document.getElementById("envelope1");
-                envelope.setAttributeNS(null,"points", s);
-
-            }
-            else{
-                if (max>1){
-                    var envelope=document.getElementById("envelope2");
-                    envelope.setAttributeNS(null,"points", s);}
-            }
-        }
-
-        this.draw_line_down(strat_point,point,max);
-    };
-
-
-    Diagram.prototype.pos_to_prob = function(i,pos){
-        var temp= pos - i* (2*this.margin+this.width)- this.margin;
-        return Math.round(temp/(this.width-2*this.margin)*100)/100;
-    }
 
     Diagram.prototype.add_eq_text = function(s1,s2, id){
         var div= document.getElementById("eq_list");
@@ -948,7 +317,6 @@ GTE = (function(parentModule) {
             cmp=cmp+1;
         }
 
-        console.log(this.equilibrium[0].length);
         //Non degenerated equilibrium for the first player.
         for (var i=0;i<strat_point[0].length;i++){
             var test=false;
@@ -1084,8 +452,409 @@ GTE = (function(parentModule) {
         }
     }
 
+    function equal_arr(arr1,arr2){ //return the z-coordinate of the point (x) in the line [p1,p2]
+        if (arr1.length==undefined)
+        return false
+        if (!arr1.length==arr2.length)
+           return false;
+        for (var i=0;i<arr1.length;i++){
+          if (!equal_num(arr1[i],arr2[i]))
+            return false;
+        }
+        return true;
+    }
 
-    Diagram.prototype.draw_square_down = function(strat11=0, strat12=1, strat21=0, strat22=1){
+    Diagram.prototype.draw_square_down = function(points1=[],points2=[]){
+      <!-- Drawing the contour-->
+      var temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+      temp.setAttribute("class","canvas0 contour bottom");
+      temp.setAttribute("points", "50,500 50,700 250,700, 250,500, 50,500");
+      GTE.svg.appendChild(temp);
+
+      <!-- Adding strategies name-->
+      temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      temp.textContent="S1";
+      temp.setAttribute("class", "canvas0 player1 strat_right strat00 bottom");
+      temp.setAttribute("x",35);
+      temp.setAttribute("y",505);
+      GTE.svg.appendChild(temp);
+      temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      temp.textContent="S2";
+      temp.setAttribute("class", "canvas0 player1 strat_right strat01 bottom");
+      temp.setAttribute("x",35);
+      temp.setAttribute("y",705);
+      GTE.svg.appendChild(temp);
+      temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      temp.textContent="S1";
+      temp.setAttribute("class", "canvas0 player2 strat strat10 bottom");
+      temp.setAttribute("x",50);
+      temp.setAttribute("y",720);
+      GTE.svg.appendChild(temp);
+      temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      temp.textContent="S2";
+      temp.setAttribute("class", "canvas0 player2 strat strat11 bottom");
+      temp.setAttribute("x",250);
+      temp.setAttribute("y",720);
+      GTE.svg.appendChild(temp);
+      //<text class="player1 strat_right strat00 change bottom" x="35" y="505">S1 </text>
+      //<text class="player1 strat_right strat01 change bottom" x="35" y="705">S2 </text>
+      //<text class="player2 strat strat10 change bottom" x="50" y="720">S1 </text>
+      //<text class="player2 strat strat11 change bottom" x="250" y="720">S2 </text>
+
+
+     <!--Add strockes-->
+     temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
+     temp.setAttribute("class", "canvas0 stick bottom");
+     temp.setAttribute("x1",Number(50));
+     temp.setAttribute("x2",Number(50));
+     temp.setAttribute("y1",Number(460));
+     temp.setAttribute("y2",Number(480));
+     temp.setAttribute("marker-end","url(#triangle_down)");
+     GTE.svg.appendChild(temp);
+     temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
+     temp.setAttribute("class", "canvas0 stick bottom");
+     temp.setAttribute("x1",Number(250));
+     temp.setAttribute("x2",Number(250));
+     temp.setAttribute("y1",Number(460));
+     temp.setAttribute("y2",Number(480));
+     temp.setAttribute("marker-end","url(#triangle_down)");
+     GTE.svg.appendChild(temp);
+     //Looking for a middle point.
+     var x_mid=250;
+     for (var i=0;i<points1.length;i++){
+       for (var j=0;j<points1[i].length;j++){
+         if (!equal_num(points1[i][j],250) && !equal_num(points1[i][j],50)){
+           x_mid=points1[i][j];
+         }
+       }
+     }
+     temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
+     temp.setAttribute("class", "canvas0 stick player1 bottom");
+     temp.setAttribute("x1",Number(x_mid));
+     temp.setAttribute("x2",Number(x_mid));
+     temp.setAttribute("y1",Number(460));
+     temp.setAttribute("y2",Number(480));
+     temp.setAttribute("marker-end","url(#triangle_down)");
+     GTE.svg.appendChild(temp);
+     //<line class="stick bottom" x1="50" y1="460" x2="50" y2="480" marker-end="url(#triangle_down)"/>
+     //<line class="stick bottom" x1="250" y1="460" x2="250" y2="480" marker-end="url(#triangle_down)"/>
+     //<line class="stick player1 bottom" x1="250" y1="460" x2="250" y2="480" marker-end="url(#triangle_down)"/>
+
+     temp = document.createElementNS("http://www.w3.org/2000/svg", "path");
+     temp.setAttribute("class", "canvas0 arc bottom");
+     temp.setAttribute("d","M450,460 A40,40 0 0,1 410,500");
+     GTE.svg.appendChild(temp);
+     temp = document.createElementNS("http://www.w3.org/2000/svg", "path");
+     temp.setAttribute("class", "canvas0 arc bottom");
+     temp.setAttribute("d","M650,460 A240,240 0 0,1 410,700");
+     GTE.svg.appendChild(temp);
+     //Looking for a middle point.
+     var x_mid=650;
+     for (var i=0;i<points2.length;i++){
+       for (var j=0;j<points2[i].length;j++){
+         if (!equal_num(points2[i][j],450) && ! equal_num(points2[i][j],650)){
+           x_mid=points2[i][j];
+         }
+       }
+     }
+     var diff=Number(x_mid-450);
+     temp = document.createElementNS("http://www.w3.org/2000/svg", "path");
+     temp.setAttribute("class", "canvas0 arc bottom player2");
+     temp.setAttribute("d","M"+x_mid+",460 A"+Number(40+diff)+","+Number(40+diff)+" 0 0,1 410,"+Number(500+diff));
+     GTE.svg.appendChild(temp);
+     //<path class="arc bottom" d="M450,460 A40,40 0 0,1 410,500"/>
+     //<path class="arc bottom" d="M650,460 A240,240 0 0,1 410,700"/>
+     //<path class="arc player2 bottom" d="M650,460 A240,240 0 0,1 410,700"/>
+
+     temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
+     temp.setAttribute("class", "canvas0 stick bottom");
+     temp.setAttribute("x1",Number(410));
+     temp.setAttribute("x2",Number(280));
+     temp.setAttribute("y1",Number(500));
+     temp.setAttribute("y2",Number(500));
+     temp.setAttribute("marker-end","url(#triangle_down)");
+     GTE.svg.appendChild(temp);
+     temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
+     temp.setAttribute("class", "canvas0 stick bottom");
+     temp.setAttribute("x1",Number(410));
+     temp.setAttribute("x2",Number(280));
+     temp.setAttribute("y1",Number(700));
+     temp.setAttribute("y2",Number(700));
+     temp.setAttribute("marker-end","url(#triangle_down)");
+     GTE.svg.appendChild(temp);
+     temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
+     temp.setAttribute("class", "canvas0 stick player2 bottom");
+     temp.setAttribute("x1",Number(410));
+     temp.setAttribute("x2",Number(280));
+     temp.setAttribute("y1",Number(500+diff));
+     temp.setAttribute("y2",Number(500+diff));
+     temp.setAttribute("marker-end","url(#triangle_down)");
+     GTE.svg.appendChild(temp);
+     //<line class="stick bottom" x1="410" y1="500" x2="280" y2="500" marker-end="url(#triangle_down)"/>
+     //<line class="stick bottom" x1="410" y1="700" x2="280" y2="700" marker-end="url(#triangle_down)"/>
+     //<line class="stick player2 bottom" x1="410" y1="700" x2="280" y2="700" marker-end="url(#triangle_down)"/>
+
+
+      <!-- Best player1 --->
+      var NE1_candidate=[];
+      var NE2_candidate=[];
+      var NE=[];
+      if (points1[0].length==0){ //S1 is strictly dominated.
+         temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+         temp.setAttribute("class","canvas0 brline line1 bottom");
+         temp.setAttribute("points", "50,700 250,700");
+         GTE.svg.appendChild(temp);
+         NE1_candidate.push(1);
+         NE2_candidate.push([0,1]);
+      }
+      if (points1[1].length==0){ //S2 is strictly dominated.
+         temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+         temp.setAttribute("class","canvas0 brline line1 bottom");
+         temp.setAttribute("points", "50,500 250,500");
+         GTE.svg.appendChild(temp);
+         NE1_candidate.push(0);
+         NE2_candidate.push([0,1]);
+      }
+      if (points1[0].length==1){ //S1 is weakly dominated.
+         NE1_candidate.push([0,1]);
+         NE1_candidate.push(1);
+         var s="50,700 250,700";
+         if (equal_num(points1[0][0],50)){
+           s="50,500 "+s;
+           NE2_candidate.push(0);
+           NE2_candidate.push([0,1]);
+         }
+         else {
+           s=s+" 250,500";
+           NE2_candidate.push(1);
+           NE2_candidate.push([0,1]);
+         }
+         temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+         temp.setAttribute("class","canvas0 brline line1 bottom");
+         temp.setAttribute("points", s);
+         GTE.svg.appendChild(temp);
+      }
+      if (points1[1].length==1){ //S2 is weakly dominated.
+        NE1_candidate.push([0,1]);
+        NE1_candidate.push(0);
+         var s="50,500 250,500";
+         if (equal_num(points1[1][0],50)){
+           s="50,700 "+s;
+           NE2_candidate.push(0);
+           NE2_candidate.push([0,1]);
+         }
+         else {
+           s=s+" 250,700";
+           NE2_candidate.push(1);
+           NE2_candidate.push([0,1]);
+         }
+         temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+         temp.setAttribute("class","canvas0 brline line1 bottom");
+         temp.setAttribute("points", s);
+         GTE.svg.appendChild(temp);
+      }
+      if (points1[0].length==2 && points1[1].length==2){
+        if (equal_num(points1[0][0],points1[1][0])){ // Game highly degenerated
+          var s="50,500 250,500 250,700, 50,700, 50,500";
+          temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+          temp.setAttribute("class","canvas0 brline line1 bottom");
+          temp.setAttribute("points", s);
+          GTE.svg.appendChild(temp);
+          NE1_candidate.push([0,1]);
+          NE2_candidate.push([0,1]);
+        }
+        if(points1[0][0]<points1[1][0]){ //S1 First.
+          var s="50,500 "+points1[0][1]+",500 "+points1[0][1]+",700 250,700";
+          temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+          temp.setAttribute("class","canvas0 brline line1 bottom");
+          temp.setAttribute("points", s);
+          GTE.svg.appendChild(temp);
+          NE1_candidate.push(0);
+          NE1_candidate.push("any");
+          NE1_candidate.push(1);
+          NE2_candidate.push(0);
+          NE2_candidate.push(Number(Number(points1[0][1]-GTE.diag.margin)/200));
+          NE2_candidate.push(1);
+        }
+        if(points1[0][0]>points1[1][0]){ //S2 First.
+          var s="50,700 "+points1[1][1]+",700 "+points1[1][1]+",500 250,500";
+          temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+          temp.setAttribute("class","canvas0 brline line1 bottom");
+          temp.setAttribute("points", s);
+          GTE.svg.appendChild(temp);
+          NE1_candidate.push(1);
+          NE1_candidate.push("any");
+          NE1_candidate.push(0);
+          NE2_candidate.push(0);
+          NE2_candidate.push(Number(Number(points1[1][1]-GTE.diag.margin)/200));
+          NE2_candidate.push(1);
+        }
+      }
+
+      <!-- Best player2 --->
+      if (points2[0].length==0){ //S1 is strictly dominated.
+         temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+         temp.setAttribute("class","canvas0 brline line2 bottom");
+         temp.setAttribute("points", "250,500 250,700");
+         GTE.svg.appendChild(temp);
+         for (var i=0;i<NE1_candidate.length;i++){
+           if (NE2_candidate[i]==1){
+             NE.push([NE1_candidate[i],NE2_candidate[i]]);
+           }
+         }
+      }
+      if (points2[1].length==0){ //S2 is strictly dominated.
+         temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+         temp.setAttribute("class","canvas0 brline line2 bottom");
+         temp.setAttribute("points", "50,500 50,700");
+         GTE.svg.appendChild(temp);
+         for (var i=0;i<NE1_candidate.length;i++){
+           if (NE2_candidate[i]==0){
+             NE.push([NE1_candidate[i],NE2_candidate[i]]);
+           }
+         }
+      }
+      if (points2[0].length==1){ //S1 is weakly dominated.
+        for (var i=0;i<NE1_candidate.length;i++){
+          if (NE2_candidate[i]==1){
+            NE.push([NE1_candidate[i],NE2_candidate[i]]);
+          }
+        }
+         var s="250,500 250,700";
+         if (equal_num(points2[0][0],450)){
+           for (var i=0;i<NE1_candidate.length;i++){
+             if (NE1_candidate[i]==0){
+               NE.push([NE1_candidate[i],NE2_candidate[i]]);
+             }
+             if (NE1_candidate[i]=="any"){
+               NE.push([0,NE2_candidate[i]]);
+             }
+           }
+           s="50,500 "+s;
+         }
+         else {
+           for (var i=0;i<NE1_candidate.length;i++){
+             if (NE1_candidate[i]==1){
+               NE.push([NE1_candidate[i],NE2_candidate[i]]);
+             }
+             if (NE1_candidate[i]=="any"){
+               NE.push([1,NE2_candidate[i]]);
+             }
+           }
+           s=s+" 50,700";
+         }
+         temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+         temp.setAttribute("class","canvas0 brline line2 bottom");
+         temp.setAttribute("points", s);
+         GTE.svg.appendChild(temp);
+      }
+      if (points2[1].length==1){ //S2 is weakly dominated.
+        for (var i=0;i<NE1_candidate.length;i++){
+          if (NE2_candidate[i]==0){
+            NE.push([NE1_candidate[i],NE2_candidate[i]]);
+          }
+        }
+         var s="50,500 50,700";
+         if (equal_num(points2[1][0],450)){
+           for (var i=0;i<NE1_candidate.length;i++){
+             if (NE1_candidate[i]==0){
+               NE.push([NE1_candidate[i],NE2_candidate[i]]);
+             }
+             if (NE1_candidate[i]=="any"){
+               NE.push([0,NE2_candidate[i]]);
+             }
+           }
+           s="250,500 "+s;
+         }
+         else {
+           for (var i=0;i<NE1_candidate.length;i++){
+             if (NE1_candidate[i]==1){
+               NE.push([NE1_candidate[i],NE2_candidate[i]]);
+             }
+             if (NE1_candidate[i]=="any"){
+               NE.push([1,NE2_candidate[i]]);
+             }
+           }
+           s=s+" 250,700";
+         }
+         temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+         temp.setAttribute("class","canvas0 brline line2 bottom");
+         temp.setAttribute("points", s);
+         GTE.svg.appendChild(temp);
+      }
+      if (points2[0].length==2 && points2[1].length==2){
+        if (equal_num(points2[0][0],points2[1][0])){ // Game highly degenerated
+          var s="50,500 250,500 250,700, 50,700, 50,500";
+          temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+          temp.setAttribute("class","canvas0 brline line2 bottom");
+          temp.setAttribute("points", s);
+          GTE.svg.appendChild(temp);
+          for (var i=0;i<NE1_candidate.length;i++){
+              NE.push([NE1_candidate[i],NE2_candidate[i]]);
+          }
+        }
+        if(points2[0][0]<points2[1][0]){ //S1 First.
+          var s="50,500 50,"+Number(points2[0][1]+50)+" 250,"+Number(points2[0][1]+50)+" 250,700";
+          temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+          temp.setAttribute("class","canvas0 brline line2 bottom");
+          temp.setAttribute("points", s);
+          GTE.svg.appendChild(temp);
+          for (var i=0;i<NE1_candidate.length;i++){
+            if ((NE1_candidate[i]==0 || equal_arr(NE1_candidate[i],[0,1]))  && (NE2_candidate[i]==0 ||equal_arr(NE2_candidate[i],[0,1]))){
+              NE.push([0,0]);
+            }
+            if( NE1_candidate[i]=="any"|| equal_arr(NE1_candidate[i],[0,1])){
+              if (NE2_candidate[i]==0){
+              NE.push([[0,Number(points2[0][1]-450)/200],NE2_candidate[i]]);
+              }else{
+                if (NE2_candidate[i]==1){
+                NE.push([[Number(points2[0][1]-450)/200,1],NE2_candidate[i]]);
+                }else {
+                NE.push([Number(points2[1][1]-450)/200,NE2_candidate[i]]);
+              }
+              }
+            }
+            if ((NE1_candidate[i]==1|| equal_arr(NE1_candidate[i],[0,1])) && (NE2_candidate[i]==1||equal_arr(NE2_candidate[i],[0,1]))){
+              NE.push([1,1]);
+            }
+          }
+        }
+        if(points2[0][0]>points2[1][0]){ //S2 First.
+          var s="250,500 250,"+Number(points2[1][1]+50)+" 50,"+Number(points2[1][1]+50)+" 50,700";
+          temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+          temp.setAttribute("class","canvas0 brline line2 bottom");
+          temp.setAttribute("points", s);
+          GTE.svg.appendChild(temp);
+          for (var i=0;i<NE1_candidate.length;i++){
+
+            if ((NE1_candidate[i]==0 || equal_arr(NE1_candidate[i],[0,1]))  && (NE2_candidate[i]==1||equal_arr(NE2_candidate[i],[0,1]))){
+              NE.push([0,1]);
+            }
+            if( NE1_candidate[i]=="any"|| equal_arr(NE1_candidate[i],[0,1])){
+              if (NE2_candidate[i]==1){
+              NE.push([[0,Number(points2[1][1]-450)/200],NE2_candidate[i]]);
+            }else{
+              if (NE2_candidate[i]==0){
+                NE.push([[Number(points2[1][1]-450)/200,1],NE2_candidate[i]]);
+              }else {
+                NE.push([Number(points2[1][1]-450)/200,NE2_candidate[i]]);
+              }
+              }
+            }
+            if ((NE1_candidate[i]==1|| equal_arr(NE1_candidate[i],[0,1])) && (NE2_candidate[i]==0||equal_arr(NE2_candidate[i],[0,1]))){
+              NE.push([1,0]);
+            }
+          }
+        }
+      }
+      console.log(NE.length);
+      for (var i=0;i<NE.length;i++){
+        console.log(NE[i][0]+" "+NE[i][1]);
+      }
+    }
+
+
+  /*  Diagram.prototype.draw_square_down = function(strat11=0, strat12=1, strat21=0, strat22=1){
         var strat=[[strat11,strat12],[strat21,strat22]];
         var inter=[[0,0],[0,0]];
         for (var i=0;i<this.intersect[0].length;i++){
@@ -1133,9 +902,7 @@ GTE = (function(parentModule) {
         temp.push(GTE.svg.getElementsByClassName("m3")[0]);
         temp.push(GTE.svg.getElementsByClassName("m4")[0]);
         temp.push(GTE.svg.getElementsByClassName("m5")[0]);
-        /*for (var i=0;i<4;i++){ //Initializing pure equilibria
-         temp[i].setAttributeNS(null, "r", 2*this.rad);
-         }*/
+
         for (var i=4;i<9;i++){ //Initializing mixed equilibria
             temp[i].setAttributeNS(null, "fill", "green");
             temp[i].setAttributeNS(null, "height", 0);
@@ -1636,7 +1403,7 @@ GTE = (function(parentModule) {
         }
 
 
-    };
+    };*/
 
     Diagram.prototype.clear = function(){
         var max =1;

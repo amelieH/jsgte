@@ -43,20 +43,48 @@ function D2draw_canvas(i){ //draw the canvas of the 2D drawing for player i
     temp.setAttribute("y",372);
     GTE.svg.appendChild(temp);
 
-//strategies name on the lower part, on the triangle side "d=0"
+//strategies name on the lower part, "d=0"
 temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
 temp.textContent="d";
-temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"1_0 legendh up");
-temp.setAttribute("x",Number(i*x_shift+70));
-temp.setAttribute("y",500);
+temp.setAttribute("class", "canvas"+i+" player"+j+" strat_right strat"+Number(j-1)+"1_0 bottom");
+temp.setAttribute("x",Number(i*x_shift+40));
+temp.setAttribute("y",455);
 GTE.svg.appendChild(temp);
 
 temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
 temp.textContent="d";
-temp.setAttribute("class", "canvas"+i+" player"+j+" strat"+Number(j-1)+"0_0 legendh up");
-temp.setAttribute("x",Number(i*x_shift+230));
-temp.setAttribute("y",500);
+temp.setAttribute("class", "canvas"+i+" player"+j+" strat_left strat"+Number(j-1)+"0_0 bottom");
+temp.setAttribute("x",Number(i*x_shift+260));
+temp.setAttribute("y",455);
 GTE.svg.appendChild(temp);
+
+temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
+temp.setAttribute("class","canvas"+i+" line"+j+ " bottom");
+temp.setAttribute("x1", Number(GTE.diag.margin+i*x_shift));
+temp.setAttribute("y1",Number(GTE.diag.height+GTE.diag.margin));
+temp.setAttribute("x2", Number(GTE.diag.margin+i*x_shift+200));
+temp.setAttribute("y2",Number(GTE.diag.height+GTE.diag.margin));
+GTE.svg.appendChild(temp);
+
+temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
+temp.setAttribute("class","canvas"+i+" stick bottom");
+temp.setAttribute("x1", Number(GTE.diag.margin+i*x_shift));
+temp.setAttribute("y1",Number(GTE.diag.height+GTE.diag.margin-5));
+temp.setAttribute("x2", Number(GTE.diag.margin+i*x_shift));
+temp.setAttribute("y2",Number(GTE.diag.height+GTE.diag.margin+5));
+GTE.svg.appendChild(temp);
+
+temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
+temp.setAttribute("class","canvas"+i+" stick bottom");
+temp.setAttribute("x1", Number(GTE.diag.margin+i*x_shift+200));
+temp.setAttribute("y1",Number(GTE.diag.height+GTE.diag.margin-5));
+temp.setAttribute("x2", Number(GTE.diag.margin+i*x_shift+200));
+temp.setAttribute("y2",Number(GTE.diag.height+GTE.diag.margin+5));
+GTE.svg.appendChild(temp);
+
+//<line class="line2 bottom" x1="50" y1="450" x2="250" y2="450"/>
+//<line class="stick bottom" x1="50" y1="445" x2="50" y2="455"/>
+//<line class="stick bottom" x1="250" y1="445" x2="250" y2="455"/>
 
 //Fix bottom line of the upper part.
     temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -420,6 +448,7 @@ function D2compute_best_response(player){ //main function uses all previous func
     for (var i=3;i<u_line_to_points.length; i++){
         bpoints.push(draw_envelope2D(u_line_to_points[i],player,Number(i-3)));
     }
+    return bpoints;
 }
 
 function draw_envelope2D(points2D,player,strat){ //draw the faces of the upper envelope. Based on the graham algorithm
@@ -436,7 +465,7 @@ function draw_envelope2D(points2D,player,strat){ //draw the faces of the upper e
         points.push([points2D[i][0],points2D[i][1]]);
     }
     if (points.length <1)
-    return;
+    return [];
     if (points.lenght>2)
        console.log("more than two points.");
     var left_point=0;
