@@ -452,6 +452,11 @@ GTE = (function(parentModule) {
     }
 
     Diagram.prototype.draw_square_down = function(points1=[],points2=[]){
+
+      var div= document.getElementById("eq_list");
+      while (div.firstChild) {
+      div.removeChild(div.firstChild);
+     }
       <!-- Drawing the contour-->
       var temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
       temp.setAttribute("class","canvas0 contour bottom");
@@ -834,9 +839,57 @@ GTE = (function(parentModule) {
           }
         }
       }
-      console.log(NE.length);
-      for (var i=0;i<NE.length;i++){
-        console.log(NE[i][0]+" "+NE[i][1]);
+      var NE_u=[]; //unique NE.
+      NE_u.push(NE[0]);
+      for (var i=1;i<NE.length;i++){
+        var newNE=true;
+        for (var j=0;j<NE_u.length;j++){
+         if (NE[i][0].length==undefined && NE[i][1].length==undefined && NE_u[j][0].length==undefined &&NE_u[j][0].length==undefined){
+           if (equal_num(NE[i][0],NE_u[j][0])){
+             if (NE[i][1]<NE_u[j][1]){
+               NE_u[j][1]=[NE[i][1],NE_u[j][1]];
+             }
+             if (NE[i][1]>NE_u[j][1]){
+               NE_u[j][1]=[NE_u[j][1],NE[i][1]];
+             }
+             newNE=false;
+             break;
+           }
+           if (equal_num(NE[i][1],NE_u[j][1])){
+             if (NE[i][0]<NE_u[j][0]){
+               NE_u[j][0]=[NE[i][0],NE_u[j][0]];
+             }
+             if (NE[i][0]>NE_u[j][0]){
+               NE_u[j][0]=[NE_u[j][0],NE[i][0]];
+             }
+             newNE=false;
+             break;
+           }
+         }
+         if( NE[i][0].length==2 && NE[i][0]=="any" && NE_u[j][0].length==undefined){
+           if (NE[i][0]="any" || equal_num(NE[i][0][0],NE_u[j][0]) || equal_num(NE[i][0][1],NE_u[j][0])){
+             if (NE_u[j][1]<NE[i][1]){
+               NE_u[j][1]=[NE_u[j][1],NE[i][1]];
+             }
+             if (NE_u[j][1]>NE[i][1]){
+               NE_u[j][1]=[NE[i][1],NE_u[j][1]];
+             }
+           }
+         }
+       }
+        if (newNE)
+        NE_u.push(NE[i]);
+      }
+      for (var i=0;i<NE_u.length;i++){
+        if (NE_u[i][0]=="any"){
+        this.add_eq_text([0,1],NE_u[i][1], i);
+        }else{
+           if (NE_u[i][1]=="any"){
+              this.add_eq_text(NE_u[i][0],[0,1], i);
+           }else{
+             this.add_eq_text(NE_u[i][0],NE_u[i][1], i);
+           }
+        }
       }
     }
 
