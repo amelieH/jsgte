@@ -528,6 +528,12 @@ function draw_envelope2D(points2D,player,strat){ //draw the faces of the upper e
               stick.setAttribute("y2",445);
               stick.setAttribute("class","canvas"+player+" line"+Number(player+1));
               GTE.svg.appendChild(stick);
+              stick=document.createElementNS("http://www.w3.org/2000/svg", "text");
+              stick.textContent=Math.round(points2D[new_point][0]*10)/10;
+              stick.setAttribute("x",points2[new_point][0]);
+              stick.setAttribute("y",435);
+              stick.setAttribute("class","canvas"+player+" player"+Number(player+1));
+              GTE.svg.appendChild(stick);
             }
         }
     }
