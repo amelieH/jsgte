@@ -7,7 +7,6 @@ var moving_point;
 
 function D2draw_canvas(i){ //draw the canvas of the 2D drawing for player i
 
-  console.log(i);
     y_space=Number(2*GTE.diag.height-4*GTE.diag.margin)/20;
 
     temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -114,17 +113,13 @@ GTE.svg.appendChild(temp);
         temp.textContent=Number(9-k);
         GTE.svg.appendChild(temp);
     }
-    console.log("canvas done");
 }
 
 function draw_line([p1,p2],i,y){ //draw the payoff line for player i strategy y
     var q1=projection2D(p1,i);
     var q2=projection2D(p2,i);
-    console.log(i);
-    console.log(q1);
-    console.log(q2);
     var temp = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    temp.setAttribute("class","line"+Number(i+1)+" face contour up");
+    temp.setAttribute("class","canvas"+i+" line"+Number(i+1)+" strat"+y+" face up");
     temp.setAttribute("x1", Number(q1[0]));
     temp.setAttribute("y1", Number(q1[1]));
     temp.setAttribute("x2", Number(q2[0]));
@@ -319,9 +314,7 @@ function y_coor(x, [p1,p2]){ //return the z-coordinate of the point (x) in the l
 function is_possible2D(vec,line){ //check if vec is a point in the convex envelope.
     if( vec[0]>Number(1+eps) || vec[0]<Number(0-eps))
         return false;
-    if (equal_num(line[0][0],line[1][0]))
-       return equal_num(line[0][0],vec);
-    for (var i=0;i<line.length;i++){
+    for (var i=3;i<line.length;i++){ //not checking with the vetrical lines.
         var temp=y_coor(vec[0],line[i]);
         if (vec[1]<Number(temp-eps))
         return false;
@@ -335,7 +328,7 @@ function D2compute_best_response(player){ //main function uses all previous func
     var nb_strat=GTE.diag.nb_strat[player];
     var payoffs=[];
     //3 fix lines, the bottom and the 2 "sides"
-    var line=[[[0,0],[1,0]],[[0,0],[0,1]],[[0,1],[1,1]]];
+    var line=[[[0,0],[1,0]],[[0,0],[0,1]],[[1,0],[1,1]]];
     for (var i=0;i<nb_strat;i++){
         payoffs.push([]);
         for (var j=0;j<2;j++){
@@ -352,7 +345,7 @@ function D2compute_best_response(player){ //main function uses all previous func
     var points_to_line=[];
     var line_to_point=[];
     for (var i=0;i<line.length;i++)
-    line_to_point.push([]);
+        line_to_point.push([]);
     var nb_points=0
     for (var i=0;i<line.length-1;i++){
         var equals=[];
@@ -423,8 +416,9 @@ function D2compute_best_response(player){ //main function uses all previous func
             u_line_to_points[points_to_line[i][k]].push(points[i]);
         }
     }
-    for (var i=4;i<u_line_to_points.length; i++){
-        draw_envelope2D(u_line_to_points[i],player,Number(i-4));
+    bpoints=[]; //bottom points;
+    for (var i=3;i<u_line_to_points.length; i++){
+        bpoints.push(draw_envelope2D(u_line_to_points[i],player,Number(i-3)));
     }
 }
 
@@ -432,8 +426,10 @@ function draw_envelope2D(points2D,player,strat){ //draw the faces of the upper e
     var points=[];
     var points1=[];
     var points2=[];
-    var center=[0,0];
+    var centeru=[0,0];
+    var centerb=[0,0];
     var nb_points=0;
+    var order_points2=[]
     for (var i=0;i<points2D.length;i++){
         points1.push(projection2D(points2D[i],player));
         points2.push(projection_line(points2D[i],player));
@@ -441,6 +437,8 @@ function draw_envelope2D(points2D,player,strat){ //draw the faces of the upper e
     }
     if (points.length <1)
     return;
+    if (points.lenght>2)
+       console.log("more than two points.");
     var left_point=0;
     for (var i=0;i<points.length;i++){
         if(points[i][0]<points[left_point][0])
@@ -451,7 +449,13 @@ function draw_envelope2D(points2D,player,strat){ //draw the faces of the upper e
             }
         }
     }
-    var s=points1[left_point][0]+","+points1[left_point][1]+" ";
+    centerb[0]=points2[left_point][0];
+    centerb[1]=points2[left_point][1];
+    centeru[0]=points1[left_point][0];
+    centeru[1]=points1[left_point][1];
+    order_points2.push(points2[left_point][0]);
+    nb_points=1;
+    var s=points1[left_point][0]+","+ Number(GTE.diag.margin)+" "+points1[left_point][0]+","+points1[left_point][1]+" ";
     var s2=points2[left_point][0]+","+points2[left_point][1]+" ";
     var test=true;
     var last_point=left_point;
@@ -478,26 +482,44 @@ function draw_envelope2D(points2D,player,strat){ //draw the faces of the upper e
         if (equal_num(new_point,-1))
         test=false;
         else{
-            s=s+points1[new_point][0]+","+points1[new_point][1]+" ";
+            s=s+points1[new_point][0]+","+points1[new_point][1]+" "+ points1[new_point][0]+","+ Number(GTE.diag.margin);
             s2=s2+points2[new_point][0]+","+points2[new_point][1]+" ";
-            center[0]=center[0]+points2[new_point][0];
-            center[1]=center[1]+points2[new_point][1];
+            centerb[0]=centerb[0]+points2[new_point][0];
+            centerb[1]=centerb[1]+points2[new_point][1];
+            centeru[0]=centeru[0]+points1[new_point][0];
+            centeru[1]=centeru[1]+points1[new_point][1];
+            order_points2.push(points2[new_point][0]);
             nb_points=nb_points+1;
             last_point=new_point;
+            if (!equal_num(points2D[new_point][0],1)){
+              var stick=document.createElementNS("http://www.w3.org/2000/svg", "line");
+              stick.setAttribute("x1",points2[new_point][0]);
+              stick.setAttribute("y1",455);
+              stick.setAttribute("x2",points2[new_point][0]);
+              stick.setAttribute("y2",445);
+              stick.setAttribute("class","canvas"+player+" line"+Number(player+1));
+              GTE.svg.appendChild(stick);
+            }
         }
     }
-    //console.log("s2");
-    //console.log(s2);
-    //console.log("s");
-    //console.log(s);
 
     var temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
     temp.setAttribute("class","canvas"+player+" project"+Number(player+1)+" face contour up");
     temp.setAttribute("points", s);
     GTE.svg.appendChild(temp);
+    var temp2=GTE.svg.getElementsByClassName("line"+Number(player+1)+" strat"+strat)[0];
+    GTE.svg.insertBefore(temp2,temp);
+    GTE.svg.insertBefore(temp,temp2);
+    var j;
+    if (player==0){
+       j=2;
+    }
+    else{
+      j=1;
+    }
 
     temp = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-    temp.setAttribute("class","canvas"+player+" project"+Number(player+1)+" face contour up");
+    temp.setAttribute("class","canvas"+player+" line"+j+" face contour up");
     temp.setAttribute("points", s2);
     GTE.svg.appendChild(temp);
 
@@ -505,10 +527,17 @@ function draw_envelope2D(points2D,player,strat){ //draw the faces of the upper e
         temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
         temp.textContent="d";
         temp.setAttribute("class", "canvas"+player+" player"+Number(player+1)+" strat"+Number(player)+""+strat+" legendh up");
-        temp.setAttribute("x",Number(center[0]/nb_points));
-        temp.setAttribute("y",Number(center[1]/nb_points)+10);
+        temp.setAttribute("x",Number(centerb[0]/nb_points));
+        temp.setAttribute("y",Number(centerb[1]/nb_points)+20);
+        GTE.svg.appendChild(temp);
+        temp = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        temp.textContent="d";
+        temp.setAttribute("class", "canvas"+player+" player"+Number(player+1)+" strat"+Number(player)+""+strat+" legendh up");
+        temp.setAttribute("x",Number(centeru[0]/nb_points));
+        temp.setAttribute("y",Number(centeru[1]/nb_points)-20);
         GTE.svg.appendChild(temp);
     }
+    return order_points2;
 }
 
 function D2delete_faces(){
