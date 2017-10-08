@@ -6,17 +6,8 @@ GTE = (function(parentModule) {
      */
     function Diagram() {
         this.precision = 1/document.getElementById("precision").value; // precision for payoffs.
-        this.endpoints = []; //two dimension array [player][strat] that contains endpoints.
-        this.lines = []; //two dimension array [player][strat_player] that contains lines.
         this.payoffs = []; //three dimension array [player][strat_p1][strat_p2] that contains payoffs
-        this.best_response = []; // two dimensions array [player][strat_other_player] that contains the best respons of a player. -1 means the two strategies are equivalent.
         this.nb_strat= [2,2];// Player's number of strategies.
-        this.intersect= []; // 2 arrays containing the mixed equilibrium.
-        this.equilibrium=[[],[]];
-        this.moving_endpoint;
-        this.moving_line;
-        this.moving;
-        this.prev_pos;
         this.rad=GTE.POINT_RADIUS;
         this.side=200;
         this.height=400;
@@ -106,15 +97,11 @@ GTE = (function(parentModule) {
     Diagram.prototype.ini_arrays = function() {
         for (var i=0; i<2; i++){
             this.payoffs.push([]);
-            this.best_response.push([]);
             for (var j=0; j<this.nb_strat[0]; j++){
                 this.payoffs[i].push([]);
                 for (var k=0;k<this.nb_strat[1] ; k++){
                     this.payoffs[i][j].push(0);
                 }
-            }
-            for (var j=0; j<GTE.tree.matrix.strategies[1+i].length; j++){
-                this.best_response[i].push(-1);
             }
         }
     };
@@ -180,7 +167,7 @@ GTE = (function(parentModule) {
     }
 
 
-    Diagram.prototype.draw_line_down = function(strat_point,point, max){
+/*    Diagram.prototype.draw_line_down = function(strat_point,point, max){
         var temp= document.getElementsByClassName("line_down").length;
         for (var i=0;i<temp;i++){
             GTE.svg.removeChild(document.getElementsByClassName("line_down")[0]);
@@ -450,7 +437,7 @@ GTE = (function(parentModule) {
                 cmp=cmp+1;
             }
         }
-    }
+    }*/
 
     function equal_arr(arr1,arr2){ //return the z-coordinate of the point (x) in the line [p1,p2]
         if (arr1.length==undefined)
@@ -1406,54 +1393,7 @@ GTE = (function(parentModule) {
     };*/
 
     Diagram.prototype.clear = function(){
-        var max =1;
-        if(this.nb_strat[0]==2 && this.nb_strat[1]==2)
-        max=2
-        for (var i=0;i<this.lines.length;i++){
-            if (i==0 || max >1){
-                for (var j=0;j<this.lines[i].length;j++){
-                    var temp=this.lines[i][j].html_element[0];
-                    GTE.svg.removeChild(temp);
-                    temp=this.lines[i][j].html_element[1];
-                    GTE.svg.removeChild(temp);
-                    temp=this.lines[i][j].txt;
-                    GTE.svg.removeChild(temp);
-                    temp=this.lines[i][j].txt2;
-                    GTE.svg.removeChild(temp);
-                }
-            }
-        }
-        for (var i=0;i<this.endpoints.length;i++){
-            if (i==0 || max >1){
-                for (var j=0;j<this.endpoints[i].length;j++){
-                    temp=this.endpoints[i][j].html_element;
-                    GTE.svg.removeChild(temp);
-                }
-            }
-        }
-        this.endpoints=[];
-        this.lines=[];
-        this.best_response=[];
         this.payoffs=[];
-        for (var i=0;i<this.intersect.length;i++){
-            if (i==0 || max >1){
-                for (var j=0; j<this.intersect[i].length;j++){
-                    this.intersect[i][j].clear();
-                }
-            }
-        }
-        this.intersect=[];
-        var envelope1=document.getElementById("envelope1");
-        if (envelope1!=null)
-        envelope1.setAttributeNS(null,"points", "50,50, 50,350, 250,350, 250,50");
-        if (this.nb_strat[0]==2 && this.nb_strat[1]==2 ){
-            var envelope2=document.getElementById("envelope2");
-            if (envelope2!=null)
-            envelope2.setAttributeNS(null,"points", "450,50, 450,350, 650,350,  650,50");}
-        var temp= GTE.svg.getElementsByClassName("up").length;
-        for( var k=0;k<temp;k++){
-            GTE.svg.removeChild(GTE.svg.getElementsByClassName("up")[0]);
-        }
         this.cleanForeign();
 
     }
