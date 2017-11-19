@@ -169,6 +169,8 @@
         document.getElementById('button-solve-lrs').style.display = 'none' ;
         document.getElementById('button-new').style.display = 'none' ;
         document.getElementById('player-buttons').style.display = 'none' ;
+        document.getElementById('button-independent-strategic-symmetric').style.display = 'none' ;
+        document.getElementById('button-independent-strategic-zerosum').style.display = 'none' ;
 
     };
     hideButtons();
